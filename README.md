@@ -131,9 +131,9 @@ Tested against claude-mem **13.28.0**. The upstream fix is proposed in claude-me
 
 ## Upstream
 
-- Issue: _link added on publish_
-- Pull request: _link added on publish_
-- Related upstream work: #4263 (stale readings within one account), #4068 (queue lost on restart).
+- Issue: [thedotmack/claude-mem#4271](https://github.com/thedotmack/claude-mem/issues/4271): quota state isn't keyed by Claude account
+- Pull request: [thedotmack/claude-mem#4272](https://github.com/thedotmack/claude-mem/pull/4272): scope quota state to the account that recorded it (TypeScript source + 13 tests)
+- Related upstream work: [#4263](https://github.com/thedotmack/claude-mem/pull/4263) (stale readings within one account), [#4068](https://github.com/thedotmack/claude-mem/issues/4068) (queue lost on restart).
 
 ## Using several subscriptions responsibly
 
