@@ -1,0 +1,12 @@
+claude-switchboard
+Copyright 2026 Aniket Ranjan / CWI Studio
+
+Licensed under the Apache License, Version 2.0.
+
+claude-mem-account-patch.py modifies an installed build of claude-mem
+(https://github.com/thedotmack/claude-mem), Copyright 2026 Alex Newman,
+licensed under the Apache License, Version 2.0. The patch contains short
+fragments of claude-mem's compiled worker in order to locate and change them.
+
+Not affiliated with, endorsed by, or supported by Anthropic or the claude-mem project.
+"Claude" and "Claude Code" are trademarks of Anthropic, PBC.
