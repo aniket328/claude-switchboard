@@ -14,4 +14,5 @@ for d in "$HOME/.claude" "$CCA_ROOT"/*(/); do   # Linux reads tokens from files;
   n="${d:t}"; [[ $d == $HOME/.claude ]] && n=default
   printf '{"claudeAiOauth":{"accessToken":"%s"}}' "$n" > "$d/.credentials.json"
 done
-python3 "$DEMO_SRC/fake_server.py" 37798 & DEMO_SERVER=$!; sleep 1
+python3 "$DEMO_SRC/fake_server.py" 37798 & DEMO_SERVER=$!
+for i in {1..50}; do curl -s -m1 -o /dev/null http://127.0.0.1:37798/api/health && break; sleep 0.2; done   # wait until it answers
