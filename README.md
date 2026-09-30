@@ -1,5 +1,7 @@
 # claude-switchboard
 
+[![ci](https://github.com/aniket328/claude-switchboard/actions/workflows/ci.yml/badge.svg)](https://github.com/aniket328/claude-switchboard/actions/workflows/ci.yml) [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
 **Run Claude Code under several Claude subscriptions, switch per terminal, and keep [claude-mem](https://github.com/thedotmack/claude-mem) remembering while you do.**
 
 Two zsh commands:
