@@ -86,6 +86,15 @@ A long-running session hits one account's weekly limit? Move **that conversation
 cca move 38f8c2b7 personal          # alias: cca switch 38f8c2b7 personal
 ```
 
+Finding the session id: a unique prefix is enough, and `cca move` searches every login.
+
+| Where you are | How |
+|---|---|
+| Any shell | `claude agents --json` under the login that runs it (`--all` includes stopped ones): `"id"` / `"sessionId"` |
+| Inside the session | `!echo $CLAUDE_CODE_SESSION_ID` |
+| Nothing running | `ls -t ~/.claude/projects/*<folder>*/*.jsonl`: the file name is the session id |
+| Starting one | `claude --bg` prints its short id; `claude --resume` with no id opens a picker |
+
 What it does, in order:
 
 1. Finds the session in every login's `claude agents --json --all` (id or prefix), or, if nothing owns it any more, by its transcript in the shared `~/.claude/projects`.
