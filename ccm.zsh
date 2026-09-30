@@ -42,7 +42,7 @@ def token(d):
     return json.loads(raw)['claudeAiOauth']['accessToken']
 def usage(d):                                        # (7-day %, 5-hour %), (None,None) if not logged in / token stale
     try:
-        r=urllib.request.Request('https://api.anthropic.com/api/oauth/usage',
+        r=urllib.request.Request(os.environ.get('CCM_USAGE_URL','https://api.anthropic.com/api/oauth/usage'),   # override: tests/demo
             headers={'Authorization':'Bearer '+token(d),'anthropic-beta':'oauth-2025-04-20'})
         j=json.load(urllib.request.urlopen(r,timeout=6))
         return (j.get('seven_day') or {}).get('utilization'),(j.get('five_hour') or {}).get('utilization')
@@ -94,7 +94,7 @@ elif mode=='pid':
     print((worker('/api/health') or {}).get('pid',''))
 else:  # status
     print(f'claude-mem bills: {nm(cur)}   (ccm <name> to change; independent of cca)')
-    for p in profiles(): u=usage(p); print(f"  {'>' if p==cur else ' '} {nm(p):<10} {fmt(u):<20} {'ok' if ok(u) else '—'}")
+    for p in profiles(): u=usage(p); print(f"  {'>' if p==cur else ' '} {nm(p):<12} {fmt(u):<20} {'ok' if ok(u) else '—'}")
     h=worker('/api/health')
     if not h: print('worker: not running (the next Claude hook starts it)'); sys.exit()
     q=(worker('/api/processing-status') or {}).get('queueDepth','?')

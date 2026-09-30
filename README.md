@@ -9,6 +9,10 @@ Two zsh commands:
 | `cca <name>` | which Claude login **this terminal's** Claude Code uses | one terminal |
 | `ccm <name>` | which Claude login the **claude-mem observer** bills | the whole machine |
 
+![cca switches the terminal's login; ccm moves claude-mem's observer to another account and the paused queue drains](demo/demo.gif)
+
+<sub>Recorded with the real `cca`/`ccm` against stand-in accounts and sample numbers (`demo/`). Re-record with `vhs demo/demo.tape`.</sub>
+
 They are deliberately independent. You can run a work session in one tab, a personal session in another, and have claude-mem's background summariser bill a third account, and none of them moves the others.
 
 Plus `claude-mem-account-patch.py`, a small patch to claude-mem that makes its quota pause **per account**, so switching the observer to an account with headroom resumes memory capture immediately instead of losing the queue.
@@ -145,6 +149,10 @@ This tool switches between logins **you own**. It does not share, pool or resell
 - macOS keychain and Linux `.credentials.json` are supported; Windows is not.
 - The usage endpoint is undocumented and may change; `ccm` shows `unknown` rather than guessing.
 - The patch targets claude-mem's compiled output, so a new claude-mem build may need new anchors. It will say so instead of half-patching.
+
+## Tests
+
+`zsh demo/smoke.zsh` runs the real `cca` and `ccm` against stand-ins for `claude`, the macOS keychain, the usage endpoint and a patched claude-mem worker, and checks that switching the observer drops the other account's pause without moving the terminal. CI runs it on macOS and Linux.
 
 ## License
 

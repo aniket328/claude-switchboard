@@ -1,0 +1,15 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: (command -v zsh || sudo apt-get install -y zsh) >/dev/null
+      - name: syntax
+        run: zsh -n cca.zsh && zsh -n ccm.zsh && python3 -m py_compile claude-mem-account-patch.py demo/fake_server.py && bash -n install.sh
+      - name: smoke (real cca/ccm against demo stand-ins)
+        run: zsh demo/smoke.zsh
