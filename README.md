@@ -69,6 +69,7 @@ cca add <name>      create a profile, then `cca login <name>`
 cca login [name]    browser login for that profile (about once a month)
 cca status [name]   who is logged in
 cca rm <name>       log out and delete the profile
+cca move <session> <name>   hand one conversation to another login (see below)
 ```
 
 How it works:
@@ -76,6 +77,25 @@ How it works:
 - Each extra login is a folder `~/.claude-accounts/<name>/` used as `CLAUDE_CONFIG_DIR`. `cca <name>` only exports that variable in the current shell.
 - Settings, plugins, skills, hooks, agents, `CLAUDE.md`, transcripts and history are **symlinked** from `~/.claude`, so every profile sees the same setup. Only the login differs.
 - Credentials are never copied. Each profile keeps its own keychain entry (macOS: `Claude Code-credentials-<sha256(dir)[:8]>`) or `.credentials.json` (Linux) and refreshes it itself. Copying tokens between profiles breaks them: refresh tokens are single-use.
+
+### `cca move` — hand a conversation to another login
+
+A long-running session hits one account's weekly limit? Move **that conversation** to another login and let it carry on:
+
+```bash
+cca move 38f8c2b7 personal          # alias: cca switch 38f8c2b7 personal
+```
+
+What it does, in order:
+
+1. Finds the session in every login's `claude agents --json --all` (id or prefix), or, if nothing owns it any more, by its transcript in the shared `~/.claude/projects`.
+2. Reads the folder and permission mode the conversation was using from its transcript, and shows the target login's weekly/5-hour usage (asks if it's above 85%).
+3. Stops it under its current login (`claude stop`). The conversation is kept.
+4. Copies that login's trust for the folder to the target login. `claude --bg` refuses untrusted folders, and trust is stored per login.
+5. Resumes the **same session id** under the target login: `claude --bg --resume <id>`, same folder, same name, same permission mode, with a short hand-off note telling it to carry on, redo a step cut off by the usage limit, and resume a running workflow with `resumeFromRunId`.
+6. Confirms the session is listed under the target login.
+
+Rules it enforces: both logins must share `~/.claude/projects` (the default for `cca add`); a session open in an interactive terminal must be exited first; the session's folder must exist on this machine. Moving between **machines** is out of scope, since it also needs the transcript and working tree copied. After a move, don't `claude attach` the old entry under the old login: that forks the conversation.
 
 ## `ccm` — the account claude-mem bills
 
